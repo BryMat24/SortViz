@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { bubbleSort } from "./algorithms/bubbleSort";
+import { quickSort } from "./algorithms/quickSort";
 import {
     BUBBLE_SORT,
     MERGE_SORT,
@@ -10,8 +11,7 @@ import {
 
 function App() {
     const [array, setArray] = useState([]);
-    const [comparing, setComparing] = useState(null);
-    const [swapping, setSwapping] = useState(null);
+    const [move, setMove] = useState({});
 
     useEffect(() => {
         resetArray();
@@ -38,6 +38,10 @@ function App() {
                 animations = bubbleSort(copy);
                 break;
 
+            case QUICK_SORT:
+                animations = quickSort(copy);
+                break;
+
             default:
                 return;
         }
@@ -47,21 +51,32 @@ function App() {
 
     const performSortingAnimations = (animations) => {
         if (animations.length === 0) return;
-        const move = animations.shift();
-        const [i, j] = move.comparison;
-        setComparing([i, j]);
+        const animate = animations.shift();
+        const [i, j] = animate.comparison;
+        const index = [i, j];
+        let isSwap = false;
 
-        if (move.swap) {
-            setSwapping([i, j]);
+        if (animate.swap) {
             [array[i], array[j]] = [array[j], array[i]];
             setArray([...array]);
+            isSwap = true;
         }
 
+        setMove({ index, isSwap });
         setTimeout(() => {
-            setComparing(null);
-            setSwapping(null);
+            setMove({});
             performSortingAnimations(animations);
         }, 50);
+    };
+
+    const getBackgroundColor = (index) => {
+        if (move.index?.length === 2) {
+            const [i, j] = move.index;
+            if (index === i || index === j) {
+                return move.isSwap ? "#a78bfa" : "#93c5fd";
+            }
+        }
+        return "";
     };
 
     return (
@@ -71,17 +86,11 @@ function App() {
                 {array.map((val, index) => (
                     <div
                         key={index}
-                        style={{ height: `${val}px` }}
-                        className={`w-[3px] bg-red-400 ${
-                            swapping &&
-                            (index === swapping[0] || index === swapping[1])
-                                ? "bg-violet-800"
-                                : comparing &&
-                                  (index === comparing[0] ||
-                                      index === comparing[1])
-                                ? "bg-blue-300"
-                                : ""
-                        }`}
+                        className="w-[3px] bg-red-400"
+                        style={{
+                            height: `${val}px`,
+                            backgroundColor: getBackgroundColor(index),
+                        }}
                     ></div>
                 ))}
             </div>
