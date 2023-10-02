@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
+import { bubbleSort } from "./algorithms/bubbleSort";
+import {
+    BUBBLE_SORT,
+    MERGE_SORT,
+    HEAP_SORT,
+    QUICK_SORT,
+} from "./algorithms/type/sortType";
 
 function App() {
     const [array, setArray] = useState([]);
@@ -20,9 +27,25 @@ function App() {
         setArray(newArray);
     };
 
+    const sortArray = (type) => {
+        let newArray;
+
+        switch (type) {
+            case BUBBLE_SORT:
+                newArray = bubbleSort(array);
+                break;
+
+            default:
+                newArray = array;
+                break;
+        }
+
+        setArray(newArray);
+    };
+
     return (
         <div className="flex flex-col items-center min-h-screen">
-            <Navbar resetArray={resetArray} />
+            <Navbar resetArray={resetArray} sortArray={sortArray} />
             <div className="flex gap-[5px] items-end grow">
                 {array.map((val, index) => (
                     <div
