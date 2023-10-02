@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { bubbleSort } from "./algorithms/bubbleSort";
 import { quickSort } from "./algorithms/quickSort";
+import { heapSort } from "./algorithms/heapSort";
 import {
     BUBBLE_SORT,
     MERGE_SORT,
@@ -40,6 +41,10 @@ function App() {
 
             case QUICK_SORT:
                 animations = quickSort(copy);
+                break;
+
+            case HEAP_SORT:
+                animations = heapSort(copy);
                 break;
 
             default:
