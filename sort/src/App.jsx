@@ -10,6 +10,8 @@ import {
 
 function App() {
     const [array, setArray] = useState([]);
+    const [comparing, setComparing] = useState(null);
+    const [swapping, setSwapping] = useState(null);
 
     useEffect(() => {
         resetArray();
@@ -21,26 +23,45 @@ function App() {
 
     const resetArray = () => {
         const newArray = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 30; i++) {
             newArray.push(randomInteger(5, 800));
         }
         setArray(newArray);
     };
 
     const sortArray = (type) => {
-        let newArray;
+        let animations;
+        const copy = [...array];
 
         switch (type) {
             case BUBBLE_SORT:
-                newArray = bubbleSort(array);
+                animations = bubbleSort(copy);
                 break;
 
             default:
-                newArray = array;
-                break;
+                return;
         }
 
-        setArray(newArray);
+        performSortingAnimations(animations);
+    };
+
+    const performSortingAnimations = (animations) => {
+        if (animations.length === 0) return;
+        const move = animations.shift();
+        const [i, j] = move.comparison;
+        setComparing([i, j]);
+
+        if (move.swap) {
+            setSwapping([i, j]);
+            [array[i], array[j]] = [array[j], array[i]];
+            setArray([...array]);
+        }
+
+        setTimeout(() => {
+            setComparing(null);
+            setSwapping(null);
+            performSortingAnimations(animations);
+        }, 50);
     };
 
     return (
@@ -50,8 +71,17 @@ function App() {
                 {array.map((val, index) => (
                     <div
                         key={index}
-                        className="w-[3px] bg-red-400"
                         style={{ height: `${val}px` }}
+                        className={`w-[3px] bg-red-400 ${
+                            swapping &&
+                            (index === swapping[0] || index === swapping[1])
+                                ? "bg-violet-800"
+                                : comparing &&
+                                  (index === comparing[0] ||
+                                      index === comparing[1])
+                                ? "bg-blue-300"
+                                : ""
+                        }`}
                     ></div>
                 ))}
             </div>
