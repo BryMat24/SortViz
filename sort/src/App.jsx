@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import { bubbleSort } from "./algorithms/bubbleSort";
 import { quickSort } from "./algorithms/quickSort";
 import { heapSort } from "./algorithms/heapSort";
+import { mergeSort } from "./algorithms/mergeSort";
 import {
     BUBBLE_SORT,
     MERGE_SORT,
@@ -45,6 +46,10 @@ function App() {
 
             case HEAP_SORT:
                 animations = heapSort(copy);
+                break;
+
+            case MERGE_SORT:
+                animations = mergeSort(copy);
                 break;
 
             default:
