@@ -14,6 +14,7 @@ import {
 function App() {
     const [array, setArray] = useState([]);
     const [move, setMove] = useState({});
+    const [sliderValue, setSliderValue] = useState(40);
 
     useEffect(() => {
         resetArray();
@@ -25,7 +26,7 @@ function App() {
 
     const resetArray = () => {
         const newArray = [];
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < sliderValue; i++) {
             newArray.push(randomInteger(5, 800));
         }
         setArray(newArray);
@@ -97,8 +98,22 @@ function App() {
     };
 
     return (
-        <div className="flex flex-col items-center min-h-screen">
+        <div className="flex flex-col items-center min-h-screen gap-[20px]">
             <Navbar resetArray={resetArray} sortArray={sortArray} />
+            <div className="w-full">
+                <h1 className="mx-[30px] mb-[10px]">Array Size: </h1>
+                <input
+                    type="range"
+                    min={5}
+                    max={100}
+                    value={sliderValue}
+                    className="range range-error max-w-[250px] mx-[30px]"
+                    onChange={(e) => {
+                        setSliderValue(e.target.value);
+                        resetArray();
+                    }}
+                />
+            </div>
             <div className="flex gap-[5px] items-end grow">
                 {array.map((val, index) => (
                     <div
