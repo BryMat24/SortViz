@@ -25,7 +25,7 @@ function App() {
 
     const resetArray = () => {
         const newArray = [];
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 50; i++) {
             newArray.push(randomInteger(5, 800));
         }
         setArray(newArray);
@@ -65,11 +65,18 @@ function App() {
         const [i, j] = animate.comparison;
         const index = [i, j];
         let isSwap = false;
+        let isOverride = false;
 
         if (animate.swap) {
             [array[i], array[j]] = [array[j], array[i]];
             setArray([...array]);
             isSwap = true;
+        }
+
+        if (animate.override) {
+            array[i] = j;
+            setArray([...array]);
+            isOverride = true;
         }
 
         setMove({ index, isSwap });
@@ -83,7 +90,7 @@ function App() {
         if (move.index?.length === 2) {
             const [i, j] = move.index;
             if (index === i || index === j) {
-                return move.isSwap ? "#a78bfa" : "#93c5fd";
+                return move.isSwap || move.override ? "#a78bfa" : "#93c5fd";
             }
         }
         return "";
