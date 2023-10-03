@@ -5,7 +5,7 @@ import {
     QUICK_SORT,
 } from "../algorithms/type/sortType";
 
-const Navbar = ({ resetArray, sortArray }) => {
+const Navbar = ({ resetArray, sortArray, isSorting }) => {
     return (
         <div className="navbar bg-base-200">
             <div className="flex-1">
@@ -15,26 +15,28 @@ const Navbar = ({ resetArray, sortArray }) => {
                 <ul className="menu menu-horizontal px-1">
                     <li>
                         <button onClick={() => sortArray(BUBBLE_SORT)}>
-                            Bubble Sort
+                            {isSorting ? "Sorting..." : "Bubble Sort"}
                         </button>
                     </li>
                     <li>
                         <button onClick={() => sortArray(HEAP_SORT)}>
-                            Heap Sort
+                            {isSorting ? "Sorting..." : "Heap Sort"}
                         </button>
                     </li>
                     <li>
                         <button onClick={() => sortArray(MERGE_SORT)}>
-                            Merge Sort
+                            {isSorting ? "Sorting..." : "Merge Sort"}
                         </button>
                     </li>
                     <li>
                         <button onClick={() => sortArray(QUICK_SORT)}>
-                            Quick Sort
+                            {isSorting ? "Sorting..." : "Quick Sort"}
                         </button>
                     </li>
                     <li>
-                        <button onClick={resetArray}>Reset</button>
+                        <button onClick={resetArray} disabled={isSorting}>
+                            {isSorting ? "Sorting..." : "Reset"}
+                        </button>
                     </li>
                 </ul>
             </div>

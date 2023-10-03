@@ -15,6 +15,7 @@ function App() {
     const [array, setArray] = useState([]);
     const [move, setMove] = useState({});
     const [sliderValue, setSliderValue] = useState(40);
+    const [isSorting, setIsSorting] = useState(false);
 
     useEffect(() => {
         resetArray();
@@ -27,7 +28,7 @@ function App() {
     const resetArray = () => {
         const newArray = [];
         for (let i = 0; i < sliderValue; i++) {
-            newArray.push(randomInteger(5, 800));
+            newArray.push(randomInteger(5, 700));
         }
         setArray(newArray);
     };
@@ -35,6 +36,7 @@ function App() {
     const sortArray = (type) => {
         let animations;
         const copy = [...array];
+        setIsSorting(true);
 
         switch (type) {
             case BUBBLE_SORT:
@@ -61,7 +63,11 @@ function App() {
     };
 
     const performSortingAnimations = (animations) => {
-        if (animations.length === 0) return;
+        if (animations.length === 0) {
+            setIsSorting(false);
+            return;
+        }
+
         const animate = animations.shift();
         const [i, j] = animate.comparison;
         const index = [i, j];
@@ -80,7 +86,7 @@ function App() {
             isOverride = true;
         }
 
-        setMove({ index, isSwap });
+        setMove({ index, isSwap, isOverride });
         setTimeout(() => {
             setMove({});
             performSortingAnimations(animations);
@@ -99,7 +105,11 @@ function App() {
 
     return (
         <div className="flex flex-col items-center min-h-screen gap-[20px]">
-            <Navbar resetArray={resetArray} sortArray={sortArray} />
+            <Navbar
+                resetArray={resetArray}
+                sortArray={sortArray}
+                isSorting={isSorting}
+            />
             <div className="w-full">
                 <h1 className="mx-[30px] mb-[10px]">Array Size: </h1>
                 <input
@@ -107,11 +117,14 @@ function App() {
                     min={5}
                     max={100}
                     value={sliderValue}
-                    className="range range-error max-w-[250px] mx-[30px]"
+                    className={`range ${
+                        !isSorting ? "range-error" : ""
+                    } max-w-[250px] mx-[30px]`}
                     onChange={(e) => {
                         setSliderValue(e.target.value);
                         resetArray();
                     }}
+                    disabled={isSorting}
                 />
             </div>
             <div className="flex gap-[5px] items-end grow">
