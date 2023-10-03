@@ -1,41 +1,48 @@
-const mergeSort = (array) => {
-    if (array.length <= 1) return array;
+const mergeSortAlgorithm = (mainArray, startIdx, endIdx, auxiliaryArray, animations) => {
+    if (startIdx === endIdx) return;
 
-    const middle = Math.floor(array.length / 2);
-    const leftArr = mergeSort(array.slice(0, middle));
-    const rightArr = mergeSort(array.slice(middle));
+    const middleIdx = Math.floor((startIdx + endIdx) / 2);
 
-    return merge(leftArr, rightArr);
-}
+    mergeSortAlgorithm(auxiliaryArray, startIdx, middleIdx, mainArray, animations);
+    mergeSortAlgorithm(auxiliaryArray, middleIdx + 1, endIdx, mainArray, animations);
 
-const merge = (leftArray, rightArray) => {
-    let result = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
+    merge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray, animations);
+};
 
-    while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
-        if (leftArray[leftIndex] < rightArray[rightIndex]) {
-            result.push(leftArray[leftIndex]);
-            leftIndex++;
+const merge = (mainArray, startIdx, middleIdx, endIdx, auxiliaryArray, animations) => {
+    let k = startIdx;
+    let i = startIdx;
+    let j = middleIdx + 1;
+
+    while (i <= middleIdx && j <= endIdx) {
+        animations.push({ comparison: [i, j], swap: false });
+        if (auxiliaryArray[i] <= auxiliaryArray[j]) {
+            animations.push({ comparison: [i, k], swap: true });
+            mainArray[k++] = auxiliaryArray[i++];
         } else {
-            result.push(rightArray[rightIndex]);
-            rightIndex++;
+            animations.push({ comparison: [j, k], swap: true });
+            mainArray[k++] = auxiliaryArray[j++];
         }
     }
 
-    while (leftIndex < leftArray.length) {
-        result.push(leftArray[leftIndex]);
-        leftIndex++;
+    while (i <= middleIdx) {
+        animations.push({ comparison: [i, k], swap: true });
+        mainArray[k++] = auxiliaryArray[i++];
     }
 
-    while (rightIndex < rightArray.length) {
-        result.push(rightArray[rightIndex]);
-        rightIndex++;
+    while (j <= endIdx) {
+        animations.push({ comparison: [j, k], swap: true });
+        mainArray[k++] = auxiliaryArray[j++];
     }
+};
 
-    return result;
-}
+export const mergeSort = (array) => {
+    const animations = [];
+    if (array.length <= 1) return array;
 
-const unsortedArray = [6, 2, 7, 3, 8, 1, 5, 4];
-const sortedArray = mergeSort(unsortedArray);
-console.log(sortedArray);
+    const auxiliaryArray = [...array];
+    mergeSortAlgorithm(array, 0, array.length - 1, auxiliaryArray, animations);
+
+    return animations;
+};
+
