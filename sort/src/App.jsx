@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import { bubbleSort } from "./algorithms/bubbleSort";
 import { quickSort } from "./algorithms/quickSort";
@@ -16,6 +16,7 @@ function App() {
     const [move, setMove] = useState({});
     const [sliderValue, setSliderValue] = useState(40);
     const [isSorting, setIsSorting] = useState(false);
+    const animationTimer = useRef(null);
 
     useEffect(() => {
         resetArray();
@@ -26,40 +27,51 @@ function App() {
     };
 
     const resetArray = () => {
+        if (animationTimer.current) {
+            clearTimeout(animationTimer.current);
+        }
+
         const newArray = [];
         for (let i = 0; i < sliderValue; i++) {
-            newArray.push(randomInteger(5, 700));
+            newArray.push(randomInteger(5, 650));
         }
+
         setArray(newArray);
+        setMove({});
+        setSortingStatus(false);
+    };
+
+    const setSortingStatus = (status) => {
+        setIsSorting(status);
     };
 
     const sortArray = (type) => {
-        let animations;
         const copy = [...array];
-        setIsSorting(true);
+        let animation;
 
         switch (type) {
             case BUBBLE_SORT:
-                animations = bubbleSort(copy);
+                animation = bubbleSort(copy);
                 break;
 
             case QUICK_SORT:
-                animations = quickSort(copy);
+                animation = quickSort(copy);
                 break;
 
             case HEAP_SORT:
-                animations = heapSort(copy);
+                animation = heapSort(copy);
                 break;
 
             case MERGE_SORT:
-                animations = mergeSort(copy);
+                animation = mergeSort(copy);
                 break;
 
             default:
                 return;
         }
 
-        performSortingAnimations(animations);
+        setIsSorting(true);
+        performSortingAnimations(animation);
     };
 
     const performSortingAnimations = (animations) => {
@@ -87,7 +99,7 @@ function App() {
         }
 
         setMove({ index, isSwap, isOverride });
-        setTimeout(() => {
+        animationTimer.current = setTimeout(() => {
             setMove({});
             performSortingAnimations(animations);
         }, 50);
@@ -109,6 +121,7 @@ function App() {
                 resetArray={resetArray}
                 sortArray={sortArray}
                 isSorting={isSorting}
+                setSortingStatus={setSortingStatus}
             />
             <div className="w-full">
                 <h1 className="mx-[30px] mb-[10px]">Array Size: </h1>

@@ -14,28 +14,44 @@ const Navbar = ({ resetArray, sortArray, isSorting }) => {
             <div className="flex-none">
                 <ul className="menu menu-horizontal px-1">
                     <li>
-                        <button onClick={() => sortArray(BUBBLE_SORT)}>
+                        <button
+                            onClick={() => sortArray(BUBBLE_SORT)}
+                            disabled={isSorting}
+                        >
                             {isSorting ? "Sorting..." : "Bubble Sort"}
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => sortArray(HEAP_SORT)}>
+                        <button
+                            onClick={() => sortArray(HEAP_SORT)}
+                            disabled={isSorting}
+                        >
                             {isSorting ? "Sorting..." : "Heap Sort"}
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => sortArray(MERGE_SORT)}>
+                        <button
+                            onClick={() => sortArray(MERGE_SORT)}
+                            disabled={isSorting}
+                        >
                             {isSorting ? "Sorting..." : "Merge Sort"}
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => sortArray(QUICK_SORT)}>
+                        <button
+                            onClick={() => sortArray(QUICK_SORT)}
+                            disabled={isSorting}
+                        >
                             {isSorting ? "Sorting..." : "Quick Sort"}
                         </button>
                     </li>
                     <li>
-                        <button onClick={resetArray} disabled={isSorting}>
-                            {isSorting ? "Sorting..." : "Reset"}
+                        <button
+                            onClick={() => {
+                                resetArray();
+                            }}
+                        >
+                            Reset
                         </button>
                     </li>
                 </ul>
