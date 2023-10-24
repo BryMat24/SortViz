@@ -128,11 +128,11 @@ function App() {
                 <input
                     type="range"
                     min={5}
-                    max={100}
+                    max={window.innerWidth >= 640 ? 50 : 30}
                     value={sliderValue}
                     className={`range ${
                         !isSorting ? "range-error" : ""
-                    } max-w-[250px] mx-[30px]`}
+                    } max-w-[200px] mx-[30px]`}
                     onChange={(e) => {
                         setSliderValue(e.target.value);
                         resetArray();
