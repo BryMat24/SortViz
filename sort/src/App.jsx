@@ -116,7 +116,7 @@ function App() {
     };
 
     return (
-        <div className="flex flex-col items-center min-h-screen gap-[20px]">
+        <div className="flex flex-col items-center min-h-screen gap-[20px] bg-[#1D232A]">
             <Navbar
                 resetArray={resetArray}
                 sortArray={sortArray}
@@ -124,7 +124,9 @@ function App() {
                 setSortingStatus={setSortingStatus}
             />
             <div className="w-full">
-                <h1 className="mx-[30px] mb-[10px]">Array Size: </h1>
+                <h1 className="mx-[30px] mb-[10px] text-[#A5ADBA]">
+                    Array Size:{" "}
+                </h1>
                 <input
                     type="range"
                     min={5}
